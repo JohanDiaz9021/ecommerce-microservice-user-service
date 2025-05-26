@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SERVICE_NAME = 'user-service'
-        IMAGE_NAME = "johandiaz9021/user-service:latest" 
+        IMAGE_NAME = "johandiaz9021/user-service:latest"
     }
 
     stages {
@@ -24,7 +24,10 @@ pipeline {
         stage('Docker Build') {
             steps {
                 dir("${SERVICE_NAME}") {
-                    bat "docker build -t ${IMAGE_NAME} ."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        bat "echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
+                        bat "docker build -t ${IMAGE_NAME} ."
+                    }
                 }
             }
         }
