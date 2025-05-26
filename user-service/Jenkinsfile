@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         SERVICE_NAME = 'user-service'
-        IMAGE_NAME = 'tuusuario/user-service:latest' // Cambia 'tuusuario' por tu usuario real de Docker Hub
+        IMAGE_NAME = 'johandiaz9021/user-service:latest' // Cambia 'tuusuario' por tu usuario real de Docker Hub
     }
 
     stages {
