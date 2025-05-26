@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         SERVICE_NAME = 'user-service'
-        IMAGE_NAME = "johandiaz9021/user-service:latest"
+        IMAGE_NAME = 'johandiaz9021/user-service:latest'
+        NAMESPACE = 'user-service-dev'
     }
 
     stages {
@@ -21,24 +22,41 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
+        stage('Docker Login') {
             steps {
-                dir("${SERVICE_NAME}") {
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        bat "echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
-                        bat "docker build -t ${IMAGE_NAME} ."
-                    }
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
                 }
             }
         }
 
-        stage('Docker Push') {
+        stage('Docker Build & Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    bat "echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
+                dir("${SERVICE_NAME}") {
+                    bat "docker build -t ${IMAGE_NAME} ."
                     bat "docker push ${IMAGE_NAME}"
+                }
+            }
+        }
+        
+        stage('K8s Deploy to Stage') {
+            steps {
+                dir("${SERVICE_NAME}/k8s") {
+                    bat 'kubectl apply -f deployment-stage.yaml'
+                    bat 'kubectl apply -f service-stage.yaml'
+                }
+            }
+        }
+
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                dir("${SERVICE_NAME}/k8s") {
+                    bat "kubectl apply -f deployment.yaml --namespace=${NAMESPACE}"
+                    bat "kubectl apply -f service.yaml --namespace=${NAMESPACE}"
                 }
             }
         }
     }
 }
+
