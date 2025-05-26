@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    environment {
+        SERVICE_NAME = 'user-service'
+        IMAGE_NAME = "tuusuario/user-service:latest" // reemplaza con tu usuario real de Docker Hub
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/SelimHorri/ecommerce-microservice-backend-app.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir("${SERVICE_NAME}") {
+                    sh './mvnw clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                // ¡No entres al subdirectorio aquí!
+                // El build se hace desde la raíz, pero usando el Dockerfile dentro de user-service
+                sh "docker build -t ${IMAGE_NAME} ${SERVICE_NAME}"
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push ${IMAGE_NAME}
+                    """
+                }
+            }
+        }
+    }
+}
