@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: favourite-service
+  namespace: favourite-service-stage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: favourite-service
+  template:
+    metadata:
+      labels:
+        app: favourite-service
+    spec:
+      containers:
+      - name: favourite-service
+        image: johandiaz9021/favourite_service:latest
+        ports:
+        - containerPort: 8080   # Cambia el puerto si tu app usa otro
