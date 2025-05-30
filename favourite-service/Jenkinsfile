@@ -17,10 +17,11 @@ pipeline {
         stage('Build and Test') {
             steps {
                 dir("${SERVICE_NAME}") {
-                    bat 'mvnw.cmd clean package'
+                    bat 'mvn clean package'
                 }
             }
         }
+
 
         stage('Docker Build') {
             steps {
