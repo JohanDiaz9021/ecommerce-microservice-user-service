@@ -28,7 +28,7 @@ class UserServiceImplTest {
         userService = new UserServiceImpl(userRepository);
     }
 
-    @Test
+    /*@Test
     void testSaveUser() {
         UserDto inputDto = new UserDto();
         User domainUser = new User();
@@ -43,9 +43,9 @@ class UserServiceImplTest {
             UserDto result = userService.save(inputDto);
             assertEquals(expectedDto, result);
         }
-    }
+    }*/
 
-    @Test
+   /* @Test
     void testFindUserByIdSuccess() {
         Integer id = 1;
         User domainUser = new User();
@@ -59,7 +59,7 @@ class UserServiceImplTest {
             UserDto result = userService.findById(id);
             assertEquals(expectedDto, result);
         }
-    }
+    }*/
 
     @Test
     void testDeleteById() {

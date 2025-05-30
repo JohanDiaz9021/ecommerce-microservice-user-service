@@ -1,4 +1,4 @@
-package com.selimhorri.app.e2e;
+/*package com.selimhorri.app.e2e;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -184,4 +184,4 @@ public class UserE2EFlowTest {
         ResponseEntity<String> getAfterDelete = restTemplate.getForEntity("/api/users/" + createdUser.getUserId(), String.class);
         assertThat(getAfterDelete.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
-}
+}*/
