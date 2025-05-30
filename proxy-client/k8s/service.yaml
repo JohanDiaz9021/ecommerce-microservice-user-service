@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: favourite-service
-  namespace: favourite-service-stage
+  name: proxy-client
+  namespace: proxy-client-stage
 spec:
   selector:
-    app: favourite-service
+    app: proxy-client
   ports:
   - protocol: TCP
     port: 8080

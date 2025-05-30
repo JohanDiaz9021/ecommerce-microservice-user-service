@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: favourite-service
-  namespace: favourite-service-stage
+  name: proxy-client
+  namespace: proxy-client-stage
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: favourite-service
+      app: proxy-client
   template:
     metadata:
       labels:
-        app: favourite-service
+        app: proxy-client
     spec:
       containers:
-      - name: favourite-service
-        image: johandiaz9021/favourite_service:latest
+      - name: proxy-client
+        image: johandiaz9021/proxy-client:latest
         ports:
         - containerPort: 8080
