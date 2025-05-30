@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+
+    environment {
+        SERVICE_NAME = 'order-service'
+        IMAGE_NAME = "johandiaz9021/order-service:latest"
+        NAMESPACE = 'order-service-stage'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/JohanDiaz9021/ecommerce-microservice-user-service.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir("${SERVICE_NAME}") {
+                    bat './mvnw.cmd clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                dir("${SERVICE_NAME}") {
+                    bat "docker build -t ${IMAGE_NAME} ."
+                }
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    bat "echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin"
+                    bat "docker push ${IMAGE_NAME}"
+                }
+            }
+        }
+    }
+
+    stage('Deploy to Kubernetes') {
+        steps {
+            dir("${SERVICE_NAME}/k8s") {
+                bat "kubectl apply -f deployment.yaml --namespace=${NAMESPACE}"
+                bat "kubectl apply -f service.yaml --namespace=${NAMESPACE}"
+            }
+        }
+    }
+}
