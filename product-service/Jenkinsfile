@@ -48,13 +48,5 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                dir("${SERVICE_NAME}/k8s") {
-                    bat "kubectl apply -f deployment.yaml --namespace=${NAMESPACE}"
-                    bat "kubectl apply -f service.yaml --namespace=${NAMESPACE}"
-                }
-            }
-        }
     }
 }
