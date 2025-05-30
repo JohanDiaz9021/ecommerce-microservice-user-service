@@ -42,8 +42,11 @@ pipeline {
         stage('K8s Deploy to Stage') {
             steps {
                 dir("${SERVICE_NAME}/k8s") {
-                    bat 'kubectl apply -f product-service-deployment.yaml'
-                    bat 'kubectl apply -f product-service-service.yaml'
+                    //bat 'kubectl apply -f product-service-deployment.yaml'
+                    bat "kubectl apply -f product-service-deployment.yaml --namespace=${NAMESPACE}"
+                    //bat 'kubectl apply -f product-service-service.yaml'
+                    bat "kubectl apply -f product-service-service.yaml --namespace=${NAMESPACE}"
+
                 }
             }
         }
