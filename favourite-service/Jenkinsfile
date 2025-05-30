@@ -17,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir("${SERVICE_NAME}") {
-                    bat './mvnw.cmd clean package -DskipTests'
+                    bat 'mvnw.cmd clean package -DskipTests'
                 }
             }
         }
