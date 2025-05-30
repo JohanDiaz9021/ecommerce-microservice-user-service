@@ -17,7 +17,10 @@ pipeline {
         stage('Build') {
             steps {
                 dir("${SERVICE_NAME}") {
+                    // Si usas Maven Wrapper, asegúrate que mvnw.cmd existe en la carpeta
+                    // Si no, usa 'mvn' directamente, asegurando que Maven esté instalado en el agente
                     bat 'mvnw.cmd clean package -DskipTests'
+                    // bat 'mvn clean package -DskipTests'
                 }
             }
         }
