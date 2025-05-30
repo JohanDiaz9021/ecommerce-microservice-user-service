@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SERVICE_NAME = 'favourite-service'
+        SERVICE_NAME = 'favourite_service'
         IMAGE_NAME = "johandiaz9021/favourite_service:latest"
         NAMESPACE = 'favourite-service-stage'
     }
@@ -14,10 +14,10 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build and Test') {
             steps {
                 dir("${SERVICE_NAME}") {
-                    bat 'mvnw.cmd clean package -DskipTests'
+                    bat 'mvnw.cmd clean package'
                 }
             }
         }
