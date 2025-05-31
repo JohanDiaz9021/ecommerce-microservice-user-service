@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: order-service
-  namespace: order-service-stage
+  namespace: order-service-master
 spec:
   replicas: 1
   selector:
@@ -18,17 +18,3 @@ spec:
           image: johandiaz9021/order-service:latest
           ports:
             - containerPort: 8080
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: order-service
-  namespace: order-service-stage
-spec:
-  selector:
-    app: order-service
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: LoadBalancer

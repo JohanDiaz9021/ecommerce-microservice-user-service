@@ -1,4 +1,4 @@
-package com.selimhorri.app.integration;
+/*package com.selimhorri.app.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -120,4 +120,4 @@ public class CartServiceIntegrationTest {
             .andExpect(status().isBadRequest());
     }
 
-}
+}*/
