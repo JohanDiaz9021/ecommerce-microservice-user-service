@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: favourite-service
-  namespace: favourite-service-stage
+  namespace: favourite-service-master
 spec:
   replicas: 1
   selector:
@@ -14,7 +14,7 @@ spec:
         app: favourite-service
     spec:
       containers:
-      - name: favourite-service
-        image: johandiaz9021/favourite_service:latest
-        ports:
-        - containerPort: 8080
+        - name: favourite-service
+          image: johandiaz9021/favourite-service:latest
+          ports:
+            - containerPort: 8080

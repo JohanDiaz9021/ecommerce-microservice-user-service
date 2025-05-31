@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        SERVICE_NAME = 'favourite_service'
-        IMAGE_NAME = "johandiaz9021/favourite_service:latest"
-        NAMESPACE = 'favourite-service-stage'
+        SERVICE_NAME = 'favourite-service'
+        IMAGE_NAME = "johandiaz9021/favourite-service:latest"
+        NAMESPACE = 'favourite-service-master'
     }
 
     stages {
@@ -14,14 +14,13 @@ pipeline {
             }
         }
 
-        stage('Build and Test') {
+        stage('Unit Tests') {
             steps {
                 dir("${SERVICE_NAME}") {
-                    bat 'mvn clean package'
+                    bat 'mvnw.cmd test'
                 }
             }
         }
-
 
         stage('Docker Build') {
             steps {
@@ -45,6 +44,15 @@ pipeline {
                 dir("${SERVICE_NAME}/k8s") {
                     bat "kubectl apply -f deployment.yaml --namespace=${NAMESPACE}"
                     bat "kubectl apply -f service.yaml --namespace=${NAMESPACE}"
+                }
+            }
+        }
+
+        stage('Generate Release Notes') {
+            steps {
+                script {
+                    bat "echo 'Release Notes: Despliegue automático de ${SERVICE_NAME} en namespace ${NAMESPACE} con pruebas unitarias exitosas.' > release-notes.txt"
+                    archiveArtifacts artifacts: 'release-notes.txt', fingerprint: true
                 }
             }
         }
