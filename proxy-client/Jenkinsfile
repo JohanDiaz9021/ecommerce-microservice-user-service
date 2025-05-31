@@ -4,7 +4,7 @@ pipeline {
     environment {
         SERVICE_NAME = 'proxy-client'
         IMAGE_NAME = "johandiaz9021/proxy-client:latest"
-        NAMESPACE = 'proxy-client-stage'
+        NAMESPACE = 'proxy-client-master'  // Cambia a master
     }
 
     stages {
@@ -14,10 +14,10 @@ pipeline {
             }
         }
 
-        stage('Build and Test') {
+        stage('Unit Tests') {
             steps {
                 dir("${SERVICE_NAME}") {
-                    bat 'mvnw.cmd clean package'
+                    bat 'mvnw.cmd test'
                 }
             }
         }
@@ -39,12 +39,19 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy to Master Kubernetes') {
             steps {
                 dir("${SERVICE_NAME}/k8s") {
                     bat "kubectl apply -f deployment.yaml --namespace=${NAMESPACE}"
                     bat "kubectl apply -f service.yaml --namespace=${NAMESPACE}"
                 }
+            }
+        }
+
+        stage('Generate Release Notes') {
+            steps {
+                // Aquí puedes agregar scripts o comandos para generar notas de release automáticas
+                echo 'Release Notes: Versión desplegada en proxy-client-master'
             }
         }
     }
