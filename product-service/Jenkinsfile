@@ -4,7 +4,7 @@ pipeline {
     environment {
         SERVICE_NAME = 'product-service'
         IMAGE_NAME = "johandiaz9021/product-service:latest"
-        NAMESPACE = 'product-service-stage'
+        NAMESPACE = 'product-service-master'
     }
 
     stages {
@@ -14,11 +14,10 @@ pipeline {
             }
         }
 
-        stage('Build and Test') {
+        stage('Unit Tests') {
             steps {
                 dir("${SERVICE_NAME}") {
-                    // Ejecuta build + pruebas unitarias (no salta tests)
-                    bat 'mvnw.cmd clean package'
+                    bat 'mvnw.cmd test'
                 }
             }
         }
@@ -49,5 +48,13 @@ pipeline {
             }
         }
     }
-}
 
+    stage('Generate Release Notes') {
+        steps {
+            script {
+                bat "echo 'Release Notes: Despliegue automático de ${SERVICE_NAME} en namespace ${NAMESPACE} con pruebas unitarias exitosas.' > release-notes.txt"
+                archiveArtifacts artifacts: 'release-notes.txt', fingerprint: true
+            }
+        }
+    }
+}
