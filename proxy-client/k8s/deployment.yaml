@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: proxy-client
-  namespace: proxy-client-master  # Cambiado a master
+  namespace: proxy-client-master  
 spec:
   replicas: 1
   selector:
@@ -23,7 +23,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: proxy-client
-  namespace: proxy-client-master  # Cambiado a master
+  namespace: proxy-client-master  
 spec:
   selector:
     app: proxy-client

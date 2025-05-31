@@ -8,6 +8,6 @@ spec:
     app: payment-service
   ports:
     - protocol: TCP
-      port: 80          # Puerto de acceso al servicio dentro del cluster
-      targetPort: 8400  # Puerto donde corre la aplicación dentro del contenedor
+      port: 80         
+      targetPort: 8400 
   type: ClusterIP
